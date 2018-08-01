@@ -1,0 +1,36 @@
+#
+# Copyright ® ZZZ Ltd. All rights reserved
+#
+
+CC = g++ # This is the main compiler
+BITS = $(shell getconf LONG_BIT)
+SRCDIR = src
+BUILDDIR = obj
+TARGET = bin/ZZZBaseMiniSamplesStore_Linux_$(BITS)bit
+
+SRCEXT = cpp
+SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+CFLAGS = -g # -Wall
+LIB = lib/ZZZBaseMini_Linux_$(BITS)bit
+INC = -I include
+
+all: $(TARGET)_a $(TARGET)_so
+	mkdir -p bin/lib
+	cp $(LIB).so bin/lib
+
+$(TARGET)_a: $(OBJECTS)
+	@echo " Linking..."
+	@echo " $(CC) $^ -o $(TARGET)_a $(LIB).a"; $(CC) $^ -o $(TARGET)_a $(LIB).a
+
+$(TARGET)_so: $(OBJECTS)
+	@echo " Linking..."
+	@echo " $(CC) $^ -o $(TARGET)_so $(LIB).so"; $(CC) $^ -o $(TARGET)_so $(LIB).so
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+clean:
+	@echo " Cleaning..."; 
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET)_a $(TARGET)_so" bin/$(LIB).so; $(RM) -r $(BUILDDIR) $(TARGET)_a $(TARGET)_so bin/$(LIB).so
