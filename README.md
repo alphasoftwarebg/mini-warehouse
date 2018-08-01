@@ -38,8 +38,8 @@ ZZZBaseMiniSampleStore report 1
 1, green apples, kg, 8, 3.28  
 
 
-# Original source  
+## Original source  
 http://zzz.bg/download/ZZZBaseMiniSampleStore_sources.zip  
 
-# Original Inretnet site  
+## Original Inretnet site  
 http://zzz.bg/zzzbase-mini/samples/store  
