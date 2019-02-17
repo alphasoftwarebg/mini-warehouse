@@ -1,12 +1,13 @@
 																			 /*
 -------- main.cpp -------------------------------------------------------------
 
-		Copyright © 2018 ZZZ Ltd. - Bulgaria. All rights reserved.
--------------------------------------------------------------------------------
+	ZZZ Base Mini sample warehouse program
+
+-------- Â© 2019 ZZZ Ltd. - Bulgaria -------------------------------------------
 																			 */
 #ifdef _WIN32
-#include <windows.h>
-#include <tchar.h>
+#	include <windows.h>
+#	include <tchar.h>
 #endif
 #include "Store.h"
 #include "Tools.h"
