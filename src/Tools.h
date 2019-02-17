@@ -1,8 +1,9 @@
 																			 /*
 -------- Tools.h --------------------------------------------------------------
 
-		Copyright © 2018 ZZZ Ltd. - Bulgaria. All rights reserved.
--------------------------------------------------------------------------------
+	ZZZ Base Mini sample warehouse program
+
+-------- Â© 2019 ZZZ Ltd. - Bulgaria -------------------------------------------
 																			 */
 #pragma once
 
@@ -12,3 +13,4 @@
 std::string ToUtf8(const wchar_t * in);
 double ToDouble(std::string const& numberString);
 std::string ToString(double number);
+int Open (const char* path, int flags, int mode);
