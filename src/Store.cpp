@@ -1,17 +1,20 @@
 																			 /*
 -------- Store.cpp ------------------------------------------------------------
 
-		Copyright © 2018 ZZZ Ltd. - Bulgaria. All rights reserved.
--------------------------------------------------------------------------------
+	ZZZ Base Mini sample warehouse program
+
+-------- Â© 2019 ZZZ Ltd. - Bulgaria -------------------------------------------
 																			 */
 #ifdef _WIN32
-#include <windows.h>
-#include <tchar.h>
+#	include <windows.h>
+#	include <tchar.h>
 #endif
+#include <stdexcept>
+#include <stdio.h>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <math.h>			// fabs
+#include <math.h>	// fabs
 #include "Store.h"
 #include "Tools.h"
 #include "../include/ZZZConsole.h"
@@ -28,11 +31,11 @@ const bool LOCAL = false;
 const double EPSILON = 0.0000001;
 
 
-
 Store::Store()
 {
     Init();
 }
+
 Store::~Store()
 {
     Clean();
@@ -77,17 +80,8 @@ bool Store::Add(
 			double newQuantity = oldQuantity + addQuantity;
 			double newPrice = oldPrice + addQuantity * addPrice;
 
-			if(zzz->MoveToElementByPath(id, path("/items/barcode/"+barcode+"/quantity"), GLOBAL))
-			{
-				zzz->RemoveElement(id);
-			}
-			zzz->AddElementByPath(id, path("/items/barcode/"+barcode+"/quantity/"+ToString(newQuantity)), GLOBAL);
-			if(zzz->MoveToElementByPath(id, path("/items/barcode/"+barcode+"/price"), GLOBAL))
-			{
-				zzz->RemoveElement(id);
-			}
-			zzz->AddElementByPath(id, path("/items/barcode/"+barcode+"/price/"), GLOBAL);
-			zzz->ChangeElement(id, ToString(newPrice));
+			setValueByPath(id, "/items/barcode/"+barcode+"/quantity/", newQuantity);
+			setValueByPath(id, "/items/barcode/"+barcode+"/price/", newPrice);
 		}
 		zzz->EndProcess(id);
 	}
@@ -131,16 +125,9 @@ bool Store::Get(
 
 			double oldPrice = ToDouble(zzz->GetElementByPath(id, path("/items/barcode/"+barcode+"/price/"), GLOBAL));
 			double newPrice = oldPrice - (oldPrice / oldQuantity) * getQuantity;
-			if(zzz->MoveToElementByPath(id, path("/items/barcode/"+barcode+"/quantity"), GLOBAL))
-			{
-				zzz->RemoveElement(id);
-			}
-			zzz->AddElementByPath(id, path("/items/barcode/"+barcode+"/quantity/"+ToString(newQuantity)), GLOBAL);
-			if(zzz->MoveToElementByPath(id, path("/items/barcode/"+barcode+"/price"), GLOBAL))
-			{
-				zzz->RemoveElement(id);
-			}
-			zzz->AddElementByPath(id, path("/items/barcode/"+barcode+"/price/"+ToString(newPrice)), GLOBAL);
+
+			setValueByPath(id, "/items/barcode/"+barcode+"/quantity/", newQuantity);
+			setValueByPath(id, "/items/barcode/"+barcode+"/price/", newPrice);
 
 			result = true;
 		}
@@ -164,20 +151,17 @@ bool Store::Report(string barcode)
 	{
 		if(barcode.compare("all") == 0)
 		{
-			if(zzz->MoveToElementByPath(id, path("/items/barcode/"), GLOBAL))
+			if(zzz->MoveToElementByPath(id, path("/items/barcode/"), GLOBAL) && zzz->MoveToFirstElement(id))
 			{
-				if(zzz->MoveToFirstElement(id))
+				do
 				{
-					do
-					{
-						string currentPath = zzz->MakePathToElement(id, true);
+					string currentPath = zzz->MakePathToElement(id, true);
 
-						Store::Report(zzz->GetElement(id));
+					Store::Report(zzz->GetElement(id));
 
-						zzz->MoveToElementByPath(id, currentPath, GLOBAL);
-					}
-					while(zzz->MoveToNextElement(id));
+					zzz->MoveToElementByPath(id, currentPath, GLOBAL);
 				}
+				while(zzz->MoveToNextElement(id));
 			}
 			result = true;
 		}
@@ -216,17 +200,17 @@ void Store::Init()
 	zzz = new ZZZBaseMini();
 	zzz->Open(STORE_BASE+"1", STORE_BASE+"2");
 
-	#ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-	#endif
+#ifdef _WIN32
+	SetConsoleOutputCP(CP_UTF8);
+#endif
 }
+
 void Store::Clean()
 {
 	zzz->Close();
 	delete zzz;
 	zzz = NULL;
 }
-
 
 bool Store::CommandLine(vector<string> arguments)
 {
@@ -297,4 +281,10 @@ bool Store::CommandLine(vector<string> arguments)
 string Store::path(string const& dividerPath)
 {
 	return zzz->DividerPathToPath(dividerPath, divider);
+}
+
+void Store::setValueByPath(long long int id, std::string const& dividerPath, double const value)
+{
+	zzz->AddElementByPath(id, path(dividerPath), GLOBAL);
+	zzz->ChangeElement(id, ToString(value));
 }
