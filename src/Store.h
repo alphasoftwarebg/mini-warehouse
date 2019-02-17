@@ -1,8 +1,9 @@
 																			 /*
 -------- Store.h --------------------------------------------------------------
 
-		Copyright © 2018 ZZZ Ltd. - Bulgaria. All rights reserved.
--------------------------------------------------------------------------------
+	ZZZ Base Mini sample warehouse program
+
+-------- Â© 2019 ZZZ Ltd. - Bulgaria -------------------------------------------
 																			 */
 #pragma once
 
@@ -42,4 +43,5 @@ protected:
 	void Init();
 	void Clean();
 	std::string path(std::string const& dividerPath);
+	void setValueByPath(long long int id, std::string const& dividerPath, double const value);
 };
