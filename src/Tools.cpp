@@ -1,8 +1,9 @@
 																			 /*
 -------- Tools.cpp ------------------------------------------------------------
 
-		Copyright © 2018 ZZZ Ltd. - Bulgaria. All rights reserved.
--------------------------------------------------------------------------------
+	ZZZ Base Mini sample warehouse program
+
+-------- Â© 2019 ZZZ Ltd. - Bulgaria -------------------------------------------
 																			 */
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -61,16 +62,14 @@ string ToUtf8(const wchar_t * in)
     return out;
 }
 
-
 double ToDouble(string const& numberString)
 {
-	double number = 0;
+	double result = 0;
 	stringstream ss(numberString);
-	ss >> number;
+	ss >> result;
 
-	return number;
+	return result;
 }
-
 
 string ToString(double number)
 {
