@@ -41,7 +41,7 @@ ZZZBaseMiniSampleStore report 1
 ## Original source  
 http://zzz.bg/download/ZZZBaseMiniSampleStore_sources.zip  
 
-## Original Inretnet site  
+## Original Internet site  
 http://zzz.bg/zzzbase-mini/samples/store  
 
 ## How to build it?
